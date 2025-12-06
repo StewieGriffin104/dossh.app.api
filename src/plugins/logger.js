@@ -1,6 +1,6 @@
 import { config } from "../config/config.js";
 
-export function loggerPlugin(fastify) {
+export async function loggerPlugin(fastify, opts, done) {
   // Log request/response details
   fastify.addHook("onRequest", (request, _reply) => {
     request.startTime = Date.now();
@@ -14,14 +14,12 @@ export function loggerPlugin(fastify) {
     const statusColor = statusCode >= 400 ? "\x1b[31m" : "\x1b[32m";
     const reset = "\x1b[0m";
 
-    console.log(
-      `${statusColor}[${statusCode}]${reset} ${method.padEnd(
-        6,
-      )} ${url} ${duration}ms`,
-    );
+    console.log(`${statusColor}[${statusCode}]${reset} ${method.padEnd(6)} ${url} ${duration}ms`);
   });
 
   if (config.NODE_ENV === "development") {
     console.log("\n✓ Logger plugin registered\n");
   }
+
+  await done();
 }
