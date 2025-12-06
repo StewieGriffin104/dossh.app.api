@@ -1,6 +1,6 @@
 import { config } from "../config/config.js";
 
-export async function loggerPlugin(fastify, opts, done) {
+export async function loggerPlugin(fastify, _, done) {
   // Log request/response details
   fastify.addHook("onRequest", (request, _reply) => {
     request.startTime = Date.now();
