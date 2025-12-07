@@ -19,7 +19,21 @@ export async function registerPlugins(fastify) {
 
   // Security headers
   await fastify.register(helmet, {
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+        imgSrc: ["'self'", "data:", "https:", "blob:", "validator.swagger.io"],
+        connectSrc: ["'self'", "validator.swagger.io"],
+        fontSrc: ["'self'", "https://cdn.jsdelivr.net"],
+        objectSrc: ["'none'"],
+        mediaSrc: ["'self'"],
+        frameSrc: ["'none'"],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginOpenerPolicy: false,
   });
 
   // Swagger/OpenAPI Documentation
@@ -32,30 +46,23 @@ export async function registerPlugins(fastify) {
       },
       servers: [
         {
-          url: `http://localhost:${config.PORT}`,
+          url: "/",
           description: "Development server",
         },
       ],
-      tags: [{ name: "health", description: "Health check endpoints" }],
-      components: {
-        securitySchemes: {
-          bearerAuth: {
-            type: "http",
-            scheme: "bearer",
-            bearerFormat: "JWT",
-          },
-        },
-      },
     },
+    exposeRoute: true,
   });
 
   await fastify.register(swaggerUI, {
     routePrefix: "/docs",
+    baseDir: "/docs",
     uiConfig: {
       docExpansion: "list",
       deepLinking: true,
     },
-    staticCSP: true,
+    staticCSP: false,
+    transformStaticCSP: (header) => header,
   });
 
   // Useful utilities
