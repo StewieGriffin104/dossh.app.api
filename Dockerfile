@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-ARG HUSKY=0
+ARG HUSKY=0 // Disable husky in Docker builds by default
 ENV HUSKY=$HUSKY
 RUN npm ci --only=production
 

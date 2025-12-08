@@ -4,7 +4,6 @@ import sensible from "@fastify/sensible";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import { loggerPlugin } from "./logger.js";
-import { config } from "../config/config.js";
 
 export async function registerPlugins(fastify) {
   // Logger plugin
@@ -17,23 +16,9 @@ export async function registerPlugins(fastify) {
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   });
 
-  // Security headers
+  // Security headers - disable CSP to allow Swagger UI to work
   await fastify.register(helmet, {
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
-        imgSrc: ["'self'", "data:", "https:", "blob:", "validator.swagger.io"],
-        connectSrc: ["'self'", "validator.swagger.io"],
-        fontSrc: ["'self'", "https://cdn.jsdelivr.net"],
-        objectSrc: ["'none'"],
-        mediaSrc: ["'self'"],
-        frameSrc: ["'none'"],
-      },
-    },
-    crossOriginEmbedderPolicy: false,
-    crossOriginOpenerPolicy: false,
+    contentSecurityPolicy: false,
   });
 
   // Swagger/OpenAPI Documentation
@@ -56,13 +41,11 @@ export async function registerPlugins(fastify) {
 
   await fastify.register(swaggerUI, {
     routePrefix: "/docs",
-    baseDir: "/docs",
     uiConfig: {
       docExpansion: "list",
-      deepLinking: true,
+      deepLinking: false,
     },
     staticCSP: false,
-    transformStaticCSP: (header) => header,
   });
 
   // Useful utilities

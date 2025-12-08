@@ -18,7 +18,8 @@
     "prepare": "if [ \"$HUSKY\" != \"0\" ]; then husky; fi",
     "docker:build": "docker build -t app.api:local . ",
     "docker:run": "docker run -p 3000:3000 app.api:local",
-    "docker:start": "npm run docker:build && npm run docker:run"
+    "docker:start": "npm run docker:build && npm run docker:run",
+    "deploy:dev": "copilot deploy --env dev"
   },
   "keywords": [
     "fastify",
