@@ -36,10 +36,7 @@ export const DeviceResponse = Type.Object({
 
 // Simplified device response (for lists)
 export const DeviceListItem = Type.Object({
-  id: Type.String(),
-  customerId: Type.Union([Type.String(), Type.Null()]),
-  deviceName: Type.Union([Type.String(), Type.Null()]),
-  deviceType: Type.Union([Type.String(), Type.Null()]),
+  deviceId: Type.String(),
   createdAt: DateTimeString,
 });
 

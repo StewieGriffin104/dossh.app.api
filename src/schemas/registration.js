@@ -7,12 +7,13 @@ import { SuccessResponse, ErrorResponse, DateTimeString, OptionalString } from "
 
 // Request body for creating registration attempt
 export const CreateRegistrationAttemptBody = Type.Object({
-  phone: OptionalString,
-  email: OptionalString,
-  action: Type.String(),
-  result: Type.String(),
-  reason: OptionalString,
-  deviceId: OptionalString,
+  phone: Type.String(),
+  email: Type.String(),
+  password: Type.String(),
+  firstName: Type.String(),
+  lastName: Type.String(),
+  ip: Type.String(),
+  deviceId: Type.String(),
 });
 
 // Response data for registration attempt

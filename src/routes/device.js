@@ -22,7 +22,10 @@ export default async function deviceRoutes(fastify) {
 
         return reply.code(201).send({
           success: true,
-          data: deviceData,
+          data: {
+            deviceId: deviceData.id,
+            createdAt: deviceData.createdAt,
+          },
         });
       } catch (error) {
         request.log.error(error, "Failed to create device");

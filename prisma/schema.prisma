@@ -60,7 +60,8 @@ model customers {
   imageUrl      String?
   role          Role      @default(CUSTOMER)
   createdAt     DateTime  @default(now())
-  updatedAt     DateTime
+  updatedAt     DateTime  @default(now())
+  isActive      Boolean   @default(false)
   accounts      accounts?
   devices       devices[]
 
@@ -133,7 +134,6 @@ model registration_tokens {
   phone             String
   firstName         String?
   lastName          String?
-  passwordHash      String
   token             String
   tokenHash         String?
   tokenType         String    @default("sms")

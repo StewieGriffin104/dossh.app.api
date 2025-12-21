@@ -3,7 +3,7 @@ import { config } from "./config/config.js";
 import { getLoggerConfig } from "./config/logger.js";
 import { registerPlugins } from "./plugins/index.js";
 import { registerRoutes } from "./routes/index.js";
-import { HealthResponse } from "./schemas/index.js";
+import { HealthResponse } from "./schemas/common.js";
 
 const fastify = Fastify({
   logger: getLoggerConfig(),
@@ -25,7 +25,7 @@ fastify.get(
       },
     },
   },
-  (request, reply) => {
+  (_, reply) => {
     return reply.code(200).send({
       success: true,
       status: "ok",

@@ -6,8 +6,26 @@ import { Type } from "@sinclair/typebox";
 export const SuccessResponse = (dataSchema) =>
   Type.Object({
     success: Type.Boolean(),
-    data: dataSchema,
+    data: Type.Optional(dataSchema),
   });
+
+export const Error400Schema = Type.Object({
+  success: Type.Boolean(),
+  error: Type.String(),
+  message: Type.String(),
+});
+
+export const Error500Schema = Type.Object({
+  success: Type.Boolean(),
+  error: Type.String(),
+  message: Type.String(),
+});
+
+export const HealthResponse = Type.Object({
+  success: Type.Boolean(),
+  status: Type.String(),
+  timestamp: Type.String({ format: "date-time" }),
+});
 
 export const ErrorResponse = Type.Object({
   success: Type.Boolean(),
