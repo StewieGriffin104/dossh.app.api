@@ -32,5 +32,5 @@ async function repositoriesPlugin(fastify) {
 
 export default fp(repositoriesPlugin, {
   name: "repositories",
-  dependencies: ["prisma"], // 依赖 prisma 插件
+  dependencies: ["prisma"],
 });

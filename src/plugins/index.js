@@ -6,6 +6,7 @@ import swaggerUI from "@fastify/swagger-ui";
 import { loggerPlugin } from "./logger.js";
 import prismaPlugin from "./prisma.js";
 import repositoriesPlugin from "./repositories.js";
+import authPlugin from "./auth.js";
 
 export async function registerPlugins(fastify) {
   // Logger plugin
@@ -16,6 +17,9 @@ export async function registerPlugins(fastify) {
 
   // Repositories plugin - must be after prisma
   await fastify.register(repositoriesPlugin);
+
+  // Auth plugin - JWT authentication
+  await fastify.register(authPlugin);
 
   // CORS support - must be registered first
   await fastify.register(cors, {

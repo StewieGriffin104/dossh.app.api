@@ -12,7 +12,7 @@ model accounts {
   customerId    String        @unique
   accountType   AccountType   @default(EVERYDAY)
   businessType  BusinessType?
-  isActive      Boolean       @default(true)
+  isActive      Boolean       @default(false)
   planId        String?
   plan          PlanType      @default(BASIC)
   planUpdatedAt DateTime      @default(now())
