@@ -1,0 +1,37 @@
+Parameters:
+  App:
+    Type: String
+    Description: Your application's name.
+  Env:
+    Type: String
+    Description: The environment name your service, job, or workflow is being deployed to.
+  Name:
+    Type: String
+    Description: Your workload's name.
+
+Resources:
+  SSMParameterReadPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Grants read access to SSM parameters for this service
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - ssm:GetParameters
+              - ssm:GetParameter
+            Resource:
+              - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/copilot/${App}/${Env}/secrets/*"
+          - Effect: Allow
+            Action:
+              - kms:Decrypt
+            Resource:
+              - !Sub "arn:aws:kms:${AWS::Region}:${AWS::AccountId}:key/*"
+
+Outputs:
+  SSMParameterReadPolicyArn:
+    Description: ARN of the SSM parameter read policy
+    Value: !Ref SSMParameterReadPolicy
+    Export:
+      Name: !Sub ${App}-${Env}-${Name}-SSMParameterReadPolicy

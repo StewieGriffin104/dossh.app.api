@@ -1,0 +1,52 @@
+# Environment files - NEVER include in Docker image
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Development files
+.git
+.gitignore
+.github
+.vscode
+.idea
+*.md
+!readme.md
+
+# Test files
+coverage
+.nyc_output
+test
+tests
+**/*.test.js
+**/*.spec.js
+
+# Build artifacts
+dist
+build
+.cache
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Documentation
+docs
+
+# Logs
+logs
+*.log
+
+# Temporary files
+tmp
+temp
+*.tmp
+*.swp

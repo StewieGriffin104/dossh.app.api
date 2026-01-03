@@ -1,0 +1,15 @@
+### Init device
+POST http://localhost:3000/api/device/create
+Content-Type: application/json
+
+{
+  "id": "device-1238",
+  "deviceName": "Android Pixel",
+  "deviceType": "mobile",
+  "os": "Android",
+  "osVersion": "14",
+  "deviceFingerprint": "fp_xyz789",
+  "ip": "203.0.113.2",
+  "isActive": true,
+  "lastUsedAt": "2025-12-12T08:00:00Z"
+}

@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "allowJs": true,
+    "noEmit": true,
+
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+
+    "target": "ES2022",
+    "lib": ["ES2022"],
+
+    // 其他选项
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    // 重要：检测未使用的变量和参数
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+
+    // 检测未定义的变量（这个会捕获 SuccessResponse 这类错误）
+    "noUncheckedIndexedAccess": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.spec.js", "**/*.test.js"]
+}

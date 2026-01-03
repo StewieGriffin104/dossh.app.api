@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model accounts {
+  id            String        @id
+  customerId    String        @unique
+  accountType   AccountType   @default(EVERYDAY)
+  businessType  BusinessType?
+  isActive      Boolean       @default(false)
+  planId        String?
+  plan          PlanType      @default(BASIC)
+  planUpdatedAt DateTime      @default(now())
+  planStartAt   DateTime      @default(now())
+  planEndAt     DateTime?
+  renewAt       DateTime?
+  canceledAt    DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime
+  customers     customers     @relation(fields: [customerId], references: [id])
+
+  @@index([accountType])
+  @@index([businessType])
+}
+
+model blocks {
+  id        String    @id
+  scope     String
+  value     String
+  reason    String?
+  source    String?
+  createdAt DateTime  @default(now())
+  expiresAt DateTime?
+  active    Boolean   @default(true)
+  meta      Json?
+  devicesId String?
+  devices   devices?  @relation(fields: [devicesId], references: [id])
+
+  @@unique([scope, value])
+  @@index([active])
+  @@index([expiresAt])
+  @@index([scope, value])
+}
+
+model customers {
+  id            String    @id
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  phone         String?   @unique
+  phoneVerified Boolean   @default(false)
+  firstName     String?
+  lastName      String?
+  username      String?
+  passwordHash  String
+  imageUrl      String?
+  role          Role      @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  isActive      Boolean   @default(false)
+  accounts      accounts?
+  devices       devices[]
+
+  @@index([createdAt])
+  @@index([emailVerified])
+  @@index([phoneVerified])
+}
+
+model device_events {
+  id        String   @id
+  deviceId  String
+  eventType String
+  eventMeta Json?
+  createdAt DateTime @default(now())
+  devices   devices  @relation(fields: [deviceId], references: [id])
+
+  @@index([createdAt])
+  @@index([deviceId])
+  @@index([eventType])
+}
+
+model devices {
+  id                    String                  @id
+  customerId            String?
+  deviceName            String?
+  deviceType            String?
+  os                    String?
+  osVersion             String?
+  deviceFingerprint     String?
+  ip                    String?
+  isActive              Boolean                 @default(true)
+  lastUsedAt            DateTime?
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime
+  blocks                blocks[]
+  device_events         device_events[]
+  customers             customers?              @relation(fields: [customerId], references: [id])
+  registration_attempts registration_attempts[]
+  registration_tokens   registration_tokens[]
+  sms_events            sms_events[]
+
+  @@index([customerId])
+  @@index([deviceFingerprint])
+  @@index([ip])
+  @@index([isActive])
+}
+
+model registration_attempts {
+  id        String   @id
+  phone     String?
+  email     String?
+  ip        String?
+  deviceId  String?
+  action    String
+  result    String
+  reason    String?
+  createdAt DateTime @default(now())
+  devicesId String?
+  devices   devices? @relation(fields: [devicesId], references: [id])
+
+  @@index([createdAt])
+  @@index([email])
+  @@index([ip])
+  @@index([phone])
+}
+
+model registration_tokens {
+  id                String    @id
+  email             String?
+  phone             String
+  firstName         String?
+  lastName          String?
+  token             String
+  tokenHash         String?
+  tokenType         String    @default("sms")
+  ip                String?
+  deviceFingerprint String?
+  attempts          Int       @default(0)
+  maxAttempts       Int       @default(5)
+  createdAt         DateTime  @default(now())
+  expiresAt         DateTime
+  verifiedAt        DateTime?
+  verifiedByUserId  String?
+  status            String    @default("pending")
+  meta              Json?
+  devicesId         String?
+  devices           devices?  @relation(fields: [devicesId], references: [id])
+
+  @@unique([phone, token])
+  @@index([deviceFingerprint])
+  @@index([email])
+  @@index([expiresAt])
+  @@index([ip])
+  @@index([phone])
+  @@index([status])
+}
+
+model sms_events {
+  id         String   @id
+  phone      String
+  direction  String   @default("outbound")
+  provider   String?
+  providerId String?
+  status     String
+  statusCode String?
+  message    String?
+  meta       Json?
+  createdAt  DateTime @default(now())
+  devicesId  String?
+  devices    devices? @relation(fields: [devicesId], references: [id])
+
+  @@index([createdAt])
+  @@index([phone])
+  @@index([status])
+}
+
+enum AccountType {
+  EVERYDAY
+  CORPORATE
+}
+
+enum BusinessType {
+  BUSINESS_OWNER
+  TRUST_OWNER
+  EMPLOYEE
+}
+
+enum PlanType {
+  BASIC
+  STANDARD
+  PREMIUM
+}
+
+enum Role {
+  CUSTOMER
+  DEVELOPER
+  TESTING
+  MANAGER
+}
